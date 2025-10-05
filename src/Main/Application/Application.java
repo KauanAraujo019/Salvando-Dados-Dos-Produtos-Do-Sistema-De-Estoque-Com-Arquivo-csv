@@ -8,8 +8,6 @@ public class Application {
 
         JanelaPrincipal janela1 = new JanelaPrincipal();
         janela1.setVisible(true);
-        //comentario
-
 
     }
 

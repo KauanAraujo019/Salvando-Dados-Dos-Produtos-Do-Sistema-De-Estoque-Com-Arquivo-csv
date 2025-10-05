@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -111,6 +112,9 @@ public class JanelaCadastroProdutos extends JFrame {
                 }
 
                try{
+
+                   File arquivoCadastro = new File("produtosCadastrados.txt");
+
                     String nomeProduto = textProduto.getText();
 
                     double precoProduto = Double.parseDouble(textPreco.getText());
@@ -126,6 +130,16 @@ public class JanelaCadastroProdutos extends JFrame {
 
                         String simbPreco = (String) comboBox.getSelectedItem();
                         produto.setSimbolPreco(simbPreco);
+
+                        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(arquivoCadastro))){
+                            System.out.println("oi");
+                        }
+                        catch (FileNotFoundException ex) {
+                            throw new RuntimeException(ex);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+
 
                         listaProdutos.add(produto);
 
