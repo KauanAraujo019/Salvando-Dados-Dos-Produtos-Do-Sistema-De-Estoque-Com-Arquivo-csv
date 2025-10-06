@@ -126,13 +126,13 @@ public class JanelaCadastroProdutos extends JFrame {
                         JOptionPane.showMessageDialog(null, "ERROR! valor inválido!");
                     }
                     else{
-                        Produto produto = new Produto(Produto.adicionarIdP(),nomeProduto, precoProduto, quantProduto);
 
-                        String simbPreco = (String) comboBox.getSelectedItem();
-                        produto.setSimbolPreco(simbPreco);
 
-                        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(arquivoCadastro))){
-                            System.out.println("oi");
+                        try (BufferedWriter bufferedReader = new BufferedWriter(new FileWriter(arquivoCadastro, true))){
+
+                            bufferedReader.write(Produto.adicionarIdP()+","+nomeProduto+",R$"+precoProduto+","+quantProduto);
+                            bufferedReader.newLine();
+
                         }
                         catch (FileNotFoundException ex) {
                             throw new RuntimeException(ex);
@@ -140,8 +140,12 @@ public class JanelaCadastroProdutos extends JFrame {
                             throw new RuntimeException(ex);
                         }
 
+                        //Produto produto = new Produto(Produto.adicionarIdP(),nomeProduto, precoProduto, quantProduto);
 
-                        listaProdutos.add(produto);
+                       // String simbPreco = (String) comboBox.getSelectedItem();
+                       // produto.setSimbolPreco(simbPreco);
+
+                       // listaProdutos.add(produto);
 
                         JOptionPane.showMessageDialog(null, "Produto "+nomeProduto+" Cadastrado!");
 
