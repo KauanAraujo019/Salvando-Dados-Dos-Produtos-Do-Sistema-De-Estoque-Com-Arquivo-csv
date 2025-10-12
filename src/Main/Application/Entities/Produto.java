@@ -32,6 +32,14 @@ public class Produto {
 
     }
 
+    public String gravarProdutoAoDocumento(){
+
+        return getIdProduto()+","+getNameProduct().toUpperCase()+","+"R$"+getPriceProduct()+","+getSimbolPreco()+","+getQuantityProduct();
+
+       // 1,MANDIOCA COM CASCA,R$15.99,950
+    }
+
+
     static int id = 0;
     public static int adicionarIdP(){
         id++;

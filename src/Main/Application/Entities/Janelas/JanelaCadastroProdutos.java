@@ -138,10 +138,12 @@ public class JanelaCadastroProdutos extends JFrame {
 
                                      line = bufferedReader.readLine();
                                  }
+                                 bufferedWriter.newLine();
 
-                                bufferedWriter.write(idCurrent+1+","+nomeProduto.toUpperCase()+",R$"+precoProduto+","+quantProduto);
-                                bufferedWriter.newLine();
+                                Produto produto = new Produto(idCurrent+1, nomeProduto, precoProduto, quantProduto);
+                                produto.setSimbolPreco(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
 
+                                bufferedWriter.write(produto.gravarProdutoAoDocumento());
 
                                 JOptionPane.showMessageDialog(null, "Produto "+nomeProduto+" Cadastrado!");
 

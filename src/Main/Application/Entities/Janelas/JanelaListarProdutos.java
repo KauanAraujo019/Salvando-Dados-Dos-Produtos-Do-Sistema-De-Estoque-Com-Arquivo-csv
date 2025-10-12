@@ -134,7 +134,7 @@ public class JanelaListarProdutos extends JFrame {
                         String precoP = prod[2].substring(2);
 
                         Produto produto = new Produto(Integer.parseInt(prod[0]), prod[1], Double.parseDouble(precoP), Integer.parseInt(prod[3]));
-
+                        produto.setSimbolPreco(prod[2].substring(0,1));
                         janelaCadastroProdutos.getListaProdutos().add(produto);
 
                         line = bufferedReader.readLine();
@@ -151,14 +151,14 @@ public class JanelaListarProdutos extends JFrame {
                         idLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
                         listagemP.add(idLabelP);
 
-                        JLabel nomeLabelP = new JLabel(produto.getNameProduct());
+                        JLabel nomeLabelP = new JLabel(produto.getNameProduct().toLowerCase());
                         nomeLabelP.setBounds(90, 40 + j, 250, 40);
                         nomeLabelP.setFont(new Font("arial", Font.PLAIN, 20));
                         nomeLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
                         listagemP.add(nomeLabelP);
 
                         String precoProd = String.format("%,.2f", produto.getPriceProduct());
-                        JLabel precoLabelP = new JLabel("R$ " + precoProd);
+                        JLabel precoLabelP = new JLabel("R$" + precoProd);
                         precoLabelP.setBounds(340, 40 + j, 150, 40);
                         precoLabelP.setFont(new Font("arial", Font.PLAIN, 20));
                         precoLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
