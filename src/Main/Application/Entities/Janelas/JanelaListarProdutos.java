@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.util.Objects;
 
 
@@ -73,6 +74,8 @@ public class JanelaListarProdutos extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                janelaCadastroProdutos.getListaProdutos().clear();
+
                 JLabel listId = new JLabel("ID");
                 listId.setBounds(0, 0, 90, 40);
                 listId.setFont(new Font("Arial", Font.BOLD,26));
@@ -118,59 +121,88 @@ public class JanelaListarProdutos extends JFrame {
 
 
                 int j = 0;
-                for (Produto produto : janelaCadastroProdutos.getListaProdutos()) {
 
-                    String idProd = String.valueOf(produto.getIdProduto());
-                    JLabel idLabelP = new JLabel(idProd);
-                    idLabelP.setBounds(0, 40 + j, 90, 40);
-                    idLabelP.setFont(new Font("arial", Font.PLAIN, 20));
-                    idLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-                    listagemP.add(idLabelP);
+                File arquivoCadastro = new File("produtosCadastrados.txt");
 
-                    JLabel nomeLabelP = new JLabel(produto.getNameProduct());
-                    nomeLabelP.setBounds(90, 40 + j, 250, 40);
-                    nomeLabelP.setFont(new Font("arial", Font.PLAIN, 20));
-                    nomeLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-                    listagemP.add(nomeLabelP);
+                try (BufferedReader bufferedReader = new BufferedReader(new FileReader(arquivoCadastro))){
 
-                    String precoProd = String.format("%,.2f", produto.getPriceProduct());
-                    JLabel precoLabelP = new JLabel("R$ " + precoProd);
-                    precoLabelP.setBounds(340, 40 + j, 150, 40);
-                    precoLabelP.setFont(new Font("arial", Font.PLAIN, 20));
-                    precoLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-                    listagemP.add(precoLabelP);
+                    String line = bufferedReader.readLine();
 
-                    String uomprod = produto.getSimbolPreco();
-                    JLabel uomLabelP = new JLabel(uomprod);
-                    uomLabelP.setBounds(490, 40 + j, 100, 40);
-                    uomLabelP.setFont(new Font("arial", Font.BOLD, 20));
-                    uomLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-                    listagemP.add(uomLabelP);
+                    while (line != null){
+                        String[] prod = line.split(",");
 
-                    String idProduto = String.valueOf(produto.getQuantityProduct());
-                    JLabel quantLabelP = new JLabel(idProduto);
-                    quantLabelP.setBounds(590, 40 + j, 150, 40);
-                    quantLabelP.setFont(new Font("arial", Font.PLAIN, 20));
-                    quantLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-                    listagemP.add(quantLabelP);
+                        String precoP = prod[2].substring(2);
 
-                    j = j + 40;
-                    System.out.println(produto.getNameProduct());
+                        Produto produto = new Produto(Integer.parseInt(prod[0]), prod[1], Double.parseDouble(precoP), Integer.parseInt(prod[3]));
 
-                }
+                        janelaCadastroProdutos.getListaProdutos().add(produto);
 
-                listagemP.setPreferredSize(new Dimension(600, j+40));
-                listagemP.setBackground(Color.WHITE);
-                listagemP.setVisible(false);
+                        line = bufferedReader.readLine();
 
-                if (janelaCadastroProdutos.getListaProdutos().isEmpty()){
-                    JOptionPane.showMessageDialog(null,"LISTA VAZIA!");
+                    }
+
+
+                    for (Produto produto : janelaCadastroProdutos.getListaProdutos()) {
+
+                        String idProd = String.valueOf(produto.getIdProduto());
+                        JLabel idLabelP = new JLabel(idProd);
+                        idLabelP.setBounds(0, 40 + j, 90, 40);
+                        idLabelP.setFont(new Font("arial", Font.PLAIN, 20));
+                        idLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+                        listagemP.add(idLabelP);
+
+                        JLabel nomeLabelP = new JLabel(produto.getNameProduct());
+                        nomeLabelP.setBounds(90, 40 + j, 250, 40);
+                        nomeLabelP.setFont(new Font("arial", Font.PLAIN, 20));
+                        nomeLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+                        listagemP.add(nomeLabelP);
+
+                        String precoProd = String.format("%,.2f", produto.getPriceProduct());
+                        JLabel precoLabelP = new JLabel("R$ " + precoProd);
+                        precoLabelP.setBounds(340, 40 + j, 150, 40);
+                        precoLabelP.setFont(new Font("arial", Font.PLAIN, 20));
+                        precoLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+                        listagemP.add(precoLabelP);
+
+                        String uomprod = produto.getSimbolPreco();
+                        JLabel uomLabelP = new JLabel(uomprod);
+                        uomLabelP.setBounds(490, 40 + j, 100, 40);
+                        uomLabelP.setFont(new Font("arial", Font.BOLD, 20));
+                        uomLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+                        listagemP.add(uomLabelP);
+
+                        String idProduto = String.valueOf(produto.getQuantityProduct());
+                        JLabel quantLabelP = new JLabel(idProduto);
+                        quantLabelP.setBounds(590, 40 + j, 150, 40);
+                        quantLabelP.setFont(new Font("arial", Font.PLAIN, 20));
+                        quantLabelP.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+                        listagemP.add(quantLabelP);
+
+                        j = j + 40;
+
+                    }
+
+                    listagemP.setPreferredSize(new Dimension(600, j+40));
+                    listagemP.setBackground(Color.WHITE);
                     listagemP.setVisible(false);
-                }
-                else{
-                    listagemP.setVisible(true);
-                    btnListar.setVisible(false);
-                    jScrollPane.setVisible(true);
+
+                    if (janelaCadastroProdutos.getListaProdutos().isEmpty()){
+                        JOptionPane.showMessageDialog(null,"LISTA VAZIA!");
+                        listagemP.setVisible(false);
+                    }
+                    else{
+                        listagemP.setVisible(true);
+                        btnListar.setVisible(false);
+                        jScrollPane.setVisible(true);
+                    }
+
+
+
+
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
 
 

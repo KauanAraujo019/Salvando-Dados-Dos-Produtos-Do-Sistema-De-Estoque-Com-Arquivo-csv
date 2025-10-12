@@ -119,19 +119,40 @@ public class JanelaCadastroProdutos extends JFrame {
 
                     double precoProduto = Double.parseDouble(textPreco.getText());
 
-
                     int quantProduto = Integer.parseInt(textQuant.getText());
 
                     if (precoProduto <= 0 || quantProduto <=0){
                         JOptionPane.showMessageDialog(null, "ERROR! valor inválido!");
                     }
                     else{
+                        Integer idCurrent = 0;
+
+                        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(arquivoCadastro, true))){
+
+                            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(arquivoCadastro))){
+                                String line = bufferedReader.readLine();
+
+                                 while (line != null){
+                                     String[] getIdCurrent = line.split(",");
+                                     idCurrent = Integer.parseInt(getIdCurrent[0]);
+
+                                     line = bufferedReader.readLine();
+                                 }
+
+                                bufferedWriter.write(idCurrent+1+","+nomeProduto.toUpperCase()+",R$"+precoProduto+","+quantProduto);
+                                bufferedWriter.newLine();
 
 
-                        try (BufferedWriter bufferedReader = new BufferedWriter(new FileWriter(arquivoCadastro, true))){
+                                JOptionPane.showMessageDialog(null, "Produto "+nomeProduto+" Cadastrado!");
 
-                            bufferedReader.write(Produto.adicionarIdP()+","+nomeProduto+",R$"+precoProduto+","+quantProduto);
-                            bufferedReader.newLine();
+                                textProduto.setText("");
+                                textPreco.setText("");
+                                textQuant.setText("");
+
+                                comboBox.setSelectedItem(" UN");
+
+
+                            }
 
                         }
                         catch (FileNotFoundException ex) {
@@ -147,14 +168,6 @@ public class JanelaCadastroProdutos extends JFrame {
 
                        // listaProdutos.add(produto);
 
-                        JOptionPane.showMessageDialog(null, "Produto "+nomeProduto+" Cadastrado!");
-
-                        textProduto.setText("");
-                        textPreco.setText("");
-                        textQuant.setText("");
-
-                        comboBox.setSelectedItem(" UN");
-
 
 
                     }
@@ -162,7 +175,7 @@ public class JanelaCadastroProdutos extends JFrame {
                 }catch (NumberFormatException errorPrecoP){
 
                        if (!textPreco.getText().trim().isEmpty() || !textQuant.getText().trim().isEmpty()) {
-                           JOptionPane.showMessageDialog(null, "ERROR! campo inválido!");
+                           JOptionPane.showMessageDialog(null, "ERROR! campo inválido11!");
 
                        }
 
