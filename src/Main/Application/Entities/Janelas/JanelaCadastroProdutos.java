@@ -113,7 +113,7 @@ public class JanelaCadastroProdutos extends JFrame {
 
                try{
 
-                   File arquivoCadastro = new File("produtosCadastrados.txt");
+                   File arquivoCadastro = new File("produtosCadastrados.csv");
 
                     String nomeProduto = textProduto.getText();
 
