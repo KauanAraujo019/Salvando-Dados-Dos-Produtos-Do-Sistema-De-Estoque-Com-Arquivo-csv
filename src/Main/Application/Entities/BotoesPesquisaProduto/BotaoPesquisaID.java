@@ -9,6 +9,7 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.util.Objects;
 
 public class BotaoPesquisaID implements ServiceActionListeners{
@@ -33,7 +34,7 @@ public class BotaoPesquisaID implements ServiceActionListeners{
 
     public void runProgram(){
 
-            try {
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("produtosCadastrados.csv")))){
 
                 String pesquisaP = textoProduto.getText();
                 int idP = Integer.parseInt(pesquisaP);
@@ -248,8 +249,11 @@ public class BotaoPesquisaID implements ServiceActionListeners{
             }catch (NumberFormatException numb){
                 JOptionPane.showMessageDialog(null, "ID invalido!");
 
+            }catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }catch (IOException e) {
+                throw new RuntimeException(e);
             }
-
 
 
     }
