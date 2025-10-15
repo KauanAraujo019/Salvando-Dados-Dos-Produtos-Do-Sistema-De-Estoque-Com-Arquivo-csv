@@ -9,6 +9,10 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,18 +40,50 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
         List<Produto> listaProdutos = new ArrayList<>();
         Produto prodAdd = null;
 
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader("produtosCadastrados.csv"))) {
+
+            janelaCadastroProdutos.getListaProdutos().clear();
+
+            String line = bufferedReader.readLine();
+
+            while (line != null){
+                String[] produtoArray = line.split(",");
+
+                int idProd = Integer.parseInt(produtoArray[0]);
+                String nomeP = produtoArray[1];
+                double precoP = Double.parseDouble(produtoArray[2].substring(2));
+                int quantityP = Integer.parseInt(produtoArray[4]);
+
+                Produto produto = new Produto(idProd, nomeP, precoP, quantityP);
+                produto.setSimbolPreco(String.valueOf(produtoArray[3]));
+
+                janelaCadastroProdutos.getListaProdutos().add(produto);
+
+                line = bufferedReader.readLine();
+
+            }
+
+        }catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
         try {
 
             String pesquisaP = textoProduto.getText();
-            char[] prodPesq = pesquisaP.toCharArray();
+            char[] prodPesq = pesquisaP.toUpperCase().toCharArray();
 
             for (Produto produto : janelaCadastroProdutos.getListaProdutos()) {
-                char[] arrayProd = produto.getNameProduct().toCharArray();
+                char[] arrayProd = produto.getNameProduct().toUpperCase().toCharArray();
                 int cont = 0;
+
 
                 for (int i = 0; i < prodPesq.length; i++) {
 
-                    if (cont > 0 && arrayProd.length < prodPesq.length) {
+                    if (cont > 0 && arrayProd.length < prodPesq.length || prodPesq[0] != arrayProd[0]) {
 
                         break;
 
