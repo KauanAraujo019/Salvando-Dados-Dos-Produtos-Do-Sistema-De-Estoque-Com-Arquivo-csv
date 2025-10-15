@@ -45,29 +45,25 @@ public class BotaoPesquisaID implements ServiceActionListeners{
 
             try (BufferedReader bufferedReader = new BufferedReader(new FileReader(("produtosCadastrados.csv")))) {
 
+                janelaCadastroProdutos.getListaProdutos().clear();
+
                 String line = bufferedReader.readLine();
 
                 while (line != null) {
                     String[] produtoArray = line.split(",");
 
-                    if (Integer.parseInt(produtoArray[0]) == idP - 1) {
+                    int idProd = Integer.parseInt(produtoArray[0]);
+                    String nomeP = produtoArray[1];
+                    double precoP = Double.parseDouble(produtoArray[2].substring(2));
+                    int quantityP = Integer.parseInt(produtoArray[4]);
 
-                        int idProd = Integer.parseInt(produtoArray[0]);
-                        String nomeP = produtoArray[1];
-                        double precoP = Double.parseDouble(produtoArray[2].substring(2));
-                        int quantityP = Integer.parseInt(produtoArray[4]);
+                    Produto produto = new Produto(idProd, nomeP, precoP, quantityP);
+                    produto.setSimbolPreco(String.valueOf(produtoArray[3]));
 
-                        Produto produto = new Produto(idProd, nomeP, precoP, quantityP);
-                        produto.setSimbolPreco(String.valueOf(produtoArray[3]));
+                    janelaCadastroProdutos.getListaProdutos().add(produto);
 
-                        janelaCadastroProdutos.getListaProdutos().add(produto);
+                    line = bufferedReader.readLine();
 
-                        bufferedReader.close();
-
-                        break;
-                    }
-
-                line = bufferedReader.readLine();
 
             }
             } catch (IOException e) {
@@ -200,8 +196,7 @@ public class BotaoPesquisaID implements ServiceActionListeners{
                             botaoSalvar.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File("produtosCadastrados.csv"), true));
-                                    BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("produtosCadastrados.csv")))){
+                                    try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File("produtosCadastrados.csv")))){
 
                                         String nomeProd = nameProd.getText();
                                         double precoProd = Double.parseDouble(priceProd.getText());
@@ -211,24 +206,23 @@ public class BotaoPesquisaID implements ServiceActionListeners{
                                         finalProduto.atualizarProduto(nomeProd, precoProd, quantProduto, simbProd);
 
 
-                                        String line = bufferedReader.readLine();
+                                        for (Produto p : janelaCadastroProdutos.getListaProdutos()){
 
-                                        while (line != null){
-                                            String[] arrayP = line.split(",");
-
-                                            if(finalProduto.getIdProduto() == Integer.parseInt(arrayP[0])){
-
-                                                System.out.println("olaa");
-
+                                            if (p.getIdProduto() == finalProduto.getIdProduto()){
                                                 bufferedWriter.write(finalProduto.gravarProdutoAoDocumento());
 
-                                                break;
+                                                bufferedWriter.newLine();
+                                            }
+                                            else{
+                                                bufferedWriter.write(p.gravarProdutoAoDocumento());
+
+                                                bufferedWriter.newLine();
 
                                             }
 
-                                            bufferedReader.readLine();
 
                                         }
+
 
                                         JOptionPane.showMessageDialog(null, "Produto Atualizado com sucesso!");
 
