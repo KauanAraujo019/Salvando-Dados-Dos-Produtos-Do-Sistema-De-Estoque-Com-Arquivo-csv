@@ -3,6 +3,7 @@ package Main.Application.Entities.BotoesPesquisaProduto;
 import Main.Application.Entities.Janelas.JanelaAtualizarProduto;
 import Main.Application.Entities.Janelas.JanelaCadastroProdutos;
 import Main.Application.Entities.Produto;
+import com.sun.jmx.snmp.SnmpNull;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
@@ -34,8 +35,6 @@ public class BotaoPesquisaID implements ServiceActionListeners{
 
     public void runProgram(){
 
-            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("produtosCadastrados.csv")))){
-
                 String pesquisaP = textoProduto.getText();
                 int idP = Integer.parseInt(pesquisaP);
 
@@ -43,7 +42,40 @@ public class BotaoPesquisaID implements ServiceActionListeners{
                     JOptionPane.showMessageDialog(null, "ID inválido!");
                     return;
                 }
-                else if (idP > janelaCadastroProdutos.getListaProdutos().size()){
+
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(("produtosCadastrados.csv")))) {
+
+                String line = bufferedReader.readLine();
+
+                while (line != null) {
+                    String[] produtoArray = line.split(",");
+
+                    if (Integer.parseInt(produtoArray[0]) == idP - 1) {
+
+                        int idProd = Integer.parseInt(produtoArray[0]);
+                        String nomeP = produtoArray[1];
+                        double precoP = Double.parseDouble(produtoArray[2].substring(2));
+                        int quantityP = Integer.parseInt(produtoArray[4]);
+
+                        Produto produto = new Produto(idProd, nomeP, precoP, quantityP);
+                        produto.setSimbolPreco(String.valueOf(produtoArray[3]));
+
+                        janelaCadastroProdutos.getListaProdutos().add(produto);
+
+                        bufferedReader.close();
+
+                        break;
+                    }
+
+                line = bufferedReader.readLine();
+
+            }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        if (idP > janelaCadastroProdutos.getListaProdutos().size()){
                     JOptionPane.showMessageDialog(null, "Produto não encontrado!");
                     return;
                 }
@@ -168,40 +200,70 @@ public class BotaoPesquisaID implements ServiceActionListeners{
                             botaoSalvar.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    String nomeProd = nameProd.getText();
-                                    double precoProd = Double.parseDouble(priceProd.getText());
-                                    int quantProduto = Integer.parseInt(quantProd.getText());
-                                    String simbProd = String.valueOf(comboP.getSelectedItem());
+                                    try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File("produtosCadastrados.csv"), true));
+                                    BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("produtosCadastrados.csv")))){
 
-                                    finalProduto.atualizarProduto(nomeProd, precoProd, quantProduto, simbProd);
+                                        String nomeProd = nameProd.getText();
+                                        double precoProd = Double.parseDouble(priceProd.getText());
+                                        int quantProduto = Integer.parseInt(quantProd.getText());
+                                        String simbProd = String.valueOf(comboP.getSelectedItem());
 
-                                    JOptionPane.showMessageDialog(null, "Produto Atualizado com sucesso!");
+                                        finalProduto.atualizarProduto(nomeProd, precoProd, quantProduto, simbProd);
 
 
-                                    janelaAtualizarProduto.remove(nameProd);
-                                    janelaAtualizarProduto.remove(priceProd);
-                                    janelaAtualizarProduto.remove(quantProd);
-                                    janelaAtualizarProduto.remove(comboP);
+                                        String line = bufferedReader.readLine();
 
-                                    janelaAtualizarProduto.remove(labelNameProd);
-                                    janelaAtualizarProduto.remove(labelPrecoProd);
-                                    janelaAtualizarProduto.remove(labelQuantProd);
-                                    janelaAtualizarProduto.remove(labelSimbpProd);
+                                        while (line != null){
+                                            String[] arrayP = line.split(",");
 
-                                    janelaAtualizarProduto.remove(textNameProd);
-                                    janelaAtualizarProduto.remove(textPrecoProd);
-                                    janelaAtualizarProduto.remove(textSimbpProd);
-                                    janelaAtualizarProduto.remove(textQuantProd);
+                                            if(finalProduto.getIdProduto() == Integer.parseInt(arrayP[0])){
 
-                                    botaoSalvar.setVisible(false);
-                                    textSalv.setVisible(false);
+                                                System.out.println("olaa");
 
-                                    botaoAtualizar.setVisible(false);
-                                    textAt.setVisible(false);
-                                    botaoPesquisa.setVisible(true);
+                                                bufferedWriter.write(finalProduto.gravarProdutoAoDocumento());
 
-                                    janelaAtualizarProduto.revalidate();
-                                    janelaAtualizarProduto.repaint();
+                                                break;
+
+                                            }
+
+                                            bufferedReader.readLine();
+
+                                        }
+
+                                        JOptionPane.showMessageDialog(null, "Produto Atualizado com sucesso!");
+
+
+                                        janelaAtualizarProduto.remove(nameProd);
+                                        janelaAtualizarProduto.remove(priceProd);
+                                        janelaAtualizarProduto.remove(quantProd);
+                                        janelaAtualizarProduto.remove(comboP);
+
+                                        janelaAtualizarProduto.remove(labelNameProd);
+                                        janelaAtualizarProduto.remove(labelPrecoProd);
+                                        janelaAtualizarProduto.remove(labelQuantProd);
+                                        janelaAtualizarProduto.remove(labelSimbpProd);
+
+                                        janelaAtualizarProduto.remove(textNameProd);
+                                        janelaAtualizarProduto.remove(textPrecoProd);
+                                        janelaAtualizarProduto.remove(textSimbpProd);
+                                        janelaAtualizarProduto.remove(textQuantProd);
+
+                                        botaoSalvar.setVisible(false);
+                                        textSalv.setVisible(false);
+
+                                        botaoAtualizar.setVisible(false);
+                                        textAt.setVisible(false);
+                                        botaoPesquisa.setVisible(true);
+
+                                        janelaAtualizarProduto.revalidate();
+                                        janelaAtualizarProduto.repaint();
+
+                                    }
+                                    catch (RuntimeException s){
+
+                                    } catch (IOException ex) {
+                                        throw new RuntimeException(ex);
+                                    }
 
                                 }
                             });
@@ -238,22 +300,13 @@ public class BotaoPesquisaID implements ServiceActionListeners{
                 }catch (NullPointerException n){
                     janelaAtualizarProduto.revalidate();
                     janelaAtualizarProduto.repaint();
+                }catch (NumberFormatException numb) {
+                JOptionPane.showMessageDialog(null, "ID invalido!");
                 }
-
 
 
                 janelaAtualizarProduto.revalidate();
                 janelaAtualizarProduto.repaint();
-
-
-            }catch (NumberFormatException numb){
-                JOptionPane.showMessageDialog(null, "ID invalido!");
-
-            }catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }catch (IOException e) {
-                throw new RuntimeException(e);
-            }
 
 
     }
