@@ -9,10 +9,7 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -292,37 +289,66 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
                             botaoSalvar.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    String nomeProd = nameProd.getText();
-                                    double precoProd = Double.parseDouble(priceProd.getText());
-                                    int quantProduto = Integer.parseInt(quantProd.getText());
-                                    String simbProd = String.valueOf(comboP.getSelectedItem());
 
-                                    finalProduto.atualizarProduto(nomeProd, precoProd, quantProduto, simbProd);
+                                    try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("produtosCadastrados.csv"))) {
 
-                                    JOptionPane.showMessageDialog(null, "Produto "+nomeProd+" Atualizado com sucesso!");
+                                        String nomeProd = nameProd.getText();
+                                        double precoProd = Double.parseDouble(priceProd.getText());
+                                        int quantProduto = Integer.parseInt(quantProd.getText());
+                                        String simbProd = String.valueOf(comboP.getSelectedItem());
 
-                                    janelaAtualizarProduto.remove(nameProd);
-                                    janelaAtualizarProduto.remove(priceProd);
-                                    janelaAtualizarProduto.remove(quantProd);
-                                    janelaAtualizarProduto.remove(comboP);
+                                        finalProduto.atualizarProduto(nomeProd, precoProd, quantProduto, simbProd);
 
-                                    janelaAtualizarProduto.remove(labelNameProd);
-                                    janelaAtualizarProduto.remove(labelPrecoProd);
-                                    janelaAtualizarProduto.remove(labelQuantProd);
-                                    janelaAtualizarProduto.remove(labelSimbpProd);
+                                        for (Produto p : janelaCadastroProdutos.getListaProdutos()){
 
-                                    janelaAtualizarProduto.remove(textNameProd);
-                                    janelaAtualizarProduto.remove(textPrecoProd);
-                                    janelaAtualizarProduto.remove(textSimbpProd);
-                                    janelaAtualizarProduto.remove(textQuantProd);
+                                            if (p.getIdProduto() == finalProduto.getIdProduto()){
+                                                bufferedWriter.write(finalProduto.gravarProdutoAoDocumento());
 
-                                    botaoSalvar.setVisible(false);
-                                    textSalv.setVisible(false);
+                                                bufferedWriter.newLine();
+                                            }
+                                            else{
+                                                bufferedWriter.write(p.gravarProdutoAoDocumento());
 
-                                    botaoAtualizar.setVisible(false);
-                                    textAt.setVisible(false);
+                                                bufferedWriter.newLine();
 
-                                    botaoPesquisa.setVisible(true);
+                                            }
+
+
+                                        }
+
+
+
+                                        JOptionPane.showMessageDialog(null, "Produto " + nomeProd + " Atualizado com sucesso!");
+
+                                        janelaAtualizarProduto.remove(nameProd);
+                                        janelaAtualizarProduto.remove(priceProd);
+                                        janelaAtualizarProduto.remove(quantProd);
+                                        janelaAtualizarProduto.remove(comboP);
+
+                                        janelaAtualizarProduto.remove(labelNameProd);
+                                        janelaAtualizarProduto.remove(labelPrecoProd);
+                                        janelaAtualizarProduto.remove(labelQuantProd);
+                                        janelaAtualizarProduto.remove(labelSimbpProd);
+
+                                        janelaAtualizarProduto.remove(textNameProd);
+                                        janelaAtualizarProduto.remove(textPrecoProd);
+                                        janelaAtualizarProduto.remove(textSimbpProd);
+                                        janelaAtualizarProduto.remove(textQuantProd);
+
+                                        botaoSalvar.setVisible(false);
+                                        textSalv.setVisible(false);
+
+                                        botaoAtualizar.setVisible(false);
+                                        textAt.setVisible(false);
+
+                                        botaoPesquisa.setVisible(true);
+
+
+                                    } catch (FileNotFoundException ex) {
+                                        throw new RuntimeException(ex);
+                                    } catch (IOException ex) {
+                                        throw new RuntimeException(ex);
+                                    }
 
 
                                     janelaAtualizarProduto.revalidate();
