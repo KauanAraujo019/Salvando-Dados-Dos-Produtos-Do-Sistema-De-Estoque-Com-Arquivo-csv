@@ -14,7 +14,6 @@ import java.util.Objects;
 
 public class JanelaCadastroProdutos extends JFrame {
     protected JanelaPrincipal janelaPrincipal;
-    protected JanelaListarProdutos listarProdutos;
     protected List<Produto> listaProdutos = new ArrayList<>();
     protected JComboBox comboBox = new JComboBox();
 
@@ -162,15 +161,6 @@ public class JanelaCadastroProdutos extends JFrame {
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
-
-                        //Produto produto = new Produto(Produto.adicionarIdP(),nomeProduto, precoProduto, quantProduto);
-
-                       // String simbPreco = (String) comboBox.getSelectedItem();
-                       // produto.setSimbolPreco(simbPreco);
-
-                       // listaProdutos.add(produto);
-
-
 
                     }
 

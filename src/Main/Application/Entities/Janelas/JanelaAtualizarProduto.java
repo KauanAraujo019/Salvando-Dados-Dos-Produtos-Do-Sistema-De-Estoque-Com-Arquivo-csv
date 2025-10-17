@@ -45,7 +45,6 @@ public class JanelaAtualizarProduto extends JFrame {
 
 
 
-
     public JanelaAtualizarProduto(JanelaPrincipal janelaPrincipal, JanelaCadastroProdutos janelaCadastroProdutos){
         this.janelaPrincipal = janelaPrincipal;
         this.janelaCadastroProdutos = janelaCadastroProdutos;
@@ -91,6 +90,7 @@ public class JanelaAtualizarProduto extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 janelaPrincipal.setVisible(true);
+
                 setVisible(false);
 
             }
@@ -104,6 +104,7 @@ public class JanelaAtualizarProduto extends JFrame {
         comboPesq.setBounds(250, 20, 60, 40);
         comboPesq.addItem("nome");
         comboPesq.addItem("ID");
+
 
 
         botaoPesquisa.addActionListener(new ActionListener() {
@@ -123,7 +124,13 @@ public class JanelaAtualizarProduto extends JFrame {
 
                 }
                 else {
-                    pesquisaNomeProduto(textoProduto, botaoPesquisa);
+
+                    JComboBox comboPid02 = new JComboBox();
+                    comboPid02.setBounds(250, 25, 320,40);
+                    comboPid02.setFont(new Font("arial", Font.PLAIN, 25));
+
+
+                    pesquisaNomeProduto(textoProduto, botaoPesquisa, comboPid02);
 
                 }
 
@@ -152,12 +159,7 @@ public class JanelaAtualizarProduto extends JFrame {
 
     }
 
-    public void pesquisaNomeProduto(JTextField textoProduto, JButton botaoPesquisa){
-        JComboBox comboPid02 = new JComboBox();
-        comboPid02.setSelectedItem(null);
-        comboPid02.removeAllItems();
-        comboPid02.setBounds(250, 25, 320,40);
-        comboPid02.setFont(new Font("arial", Font.PLAIN, 25));
+    public void pesquisaNomeProduto(JTextField textoProduto, JButton botaoPesquisa, JComboBox comboPid02){
 
         ServiceActionListeners botaoPesquisaNome = new BotaoPesquisaNome(textoProduto, janelaCadastroProdutos, comboPid02, botaoPesquisa, jan);
 

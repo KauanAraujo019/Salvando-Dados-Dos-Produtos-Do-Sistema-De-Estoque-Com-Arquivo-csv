@@ -109,7 +109,6 @@ public class JanelaPrincipal extends JFrame {
         botaoAtualizarProduto.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                janelaAtualizarP.revalidate();
                 janelaAtualizarP.setVisible(true);
                 setVisible(false);
 
