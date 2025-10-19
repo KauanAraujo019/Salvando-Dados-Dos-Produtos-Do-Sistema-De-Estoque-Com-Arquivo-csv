@@ -186,7 +186,7 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
                     String nameP = produtoFinal[0].toLowerCase();
                     String precoP = produtoFinal[1].substring(3);
                     double precoP2 = Double.parseDouble(precoP);
-                    precoP = String.format("%.2f", precoP2);
+                    String precoP3 = String.format("%.2f", precoP2);
                     String quantP = produtoFinal[2].substring(4);
                     String simbP = produtoFinal[3];
 
@@ -205,7 +205,7 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
                     labelPrecoProd.setBounds(10, 120, 150, 40);
                     labelPrecoProd.setFont(new Font("arial", Font.BOLD, 20));
 
-                    JLabel textPrecoProd = new JLabel(precoP);
+                    JLabel textPrecoProd = new JLabel(precoP3);
                     textPrecoProd.setBounds(150, 120, 150, 35);
                     textPrecoProd.setFont(new Font("arial", Font.PLAIN, 25));
                     textPrecoProd.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -241,7 +241,6 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
 
 
                     Produto finalProduto = produto;
-                    String finalPrecoP = precoP;
                     botaoAtualizar.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -257,7 +256,7 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
                             nameProd.setFont(new Font("arial", Font.PLAIN, 25));
 
 
-                            JTextField priceProd = new JTextField(finalPrecoP);
+                            JTextField priceProd = new JTextField(precoP);
                             priceProd.setBounds(150, 120, 150, 35);
                             priceProd.setFont(new Font("arial", Font.PLAIN, 25));
 

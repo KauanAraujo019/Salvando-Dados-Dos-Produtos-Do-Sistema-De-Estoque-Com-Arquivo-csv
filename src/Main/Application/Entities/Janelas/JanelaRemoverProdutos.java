@@ -7,10 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Objects;
 
 public class JanelaRemoverProdutos extends JanelaAtualizarProduto {
@@ -157,6 +154,21 @@ public class JanelaRemoverProdutos extends JanelaAtualizarProduto {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         janelaCadastroProdutos.getListaProdutos().remove(finalProduto);
+
+                        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("produtosCadastrados.csv"))){
+
+                            for (Produto p : janelaCadastroProdutos.getListaProdutos()){
+
+                                bufferedWriter.write(p.gravarProdutoAoDocumento());
+
+                                bufferedWriter.newLine();
+
+                            }
+
+
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
 
 
                         JOptionPane.showMessageDialog(null, "Produto excluído com sucesso!");
