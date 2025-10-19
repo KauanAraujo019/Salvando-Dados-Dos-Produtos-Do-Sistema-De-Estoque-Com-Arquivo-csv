@@ -48,7 +48,7 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
                 String[] produtoArray = line.split(",");
 
                 int idProd = Integer.parseInt(produtoArray[0]);
-                String nomeP = produtoArray[1];
+                String nomeP = produtoArray[1].toLowerCase();
                 double precoP = Double.parseDouble(produtoArray[2].substring(2));
                 int quantityP = Integer.parseInt(produtoArray[4]);
 
@@ -302,22 +302,39 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
 
                                         finalProduto.atualizarProduto(nomeProd, precoProd, quantProduto, simbProd);
 
+                                        int i = 0;
                                         for (Produto p : janelaCadastroProdutos.getListaProdutos()){
+                                            i++;
+
 
                                             if (p.getIdProduto() == finalProduto.getIdProduto()){
                                                 bufferedWriter.write(finalProduto.gravarProdutoAoDocumento());
 
-                                                bufferedWriter.newLine();
+                                                if (i == janelaCadastroProdutos.getListaProdutos().size()){
+                                                    break;
+                                                }
+                                                else{
+                                                    bufferedWriter.newLine();
+                                                }
+
+
                                             }
                                             else{
                                                 bufferedWriter.write(p.gravarProdutoAoDocumento());
 
-                                                bufferedWriter.newLine();
+                                                if (i == janelaCadastroProdutos.getListaProdutos().size()){
+                                                    break;
+                                                }
+                                                else{
+                                                    bufferedWriter.newLine();
+                                                }
 
                                             }
 
-
                                         }
+
+                                        bufferedWriter.close();
+
 
 
 
