@@ -7,6 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Objects;
 
 public class JanelaRemoverProdutos extends JanelaAtualizarProduto {
@@ -42,10 +46,26 @@ public class JanelaRemoverProdutos extends JanelaAtualizarProduto {
 
     @Override
     public void pesquisaIDProduto(JTextField textoProduto, JButton botaoPesquisa){
-        try {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("produtosCadastrados.csv"))){
+
+            janelaCadastroProdutos.getListaProdutos().clear();
 
             String pesquisaP = textoProduto.getText();
             int idP = Integer.parseInt(pesquisaP);
+
+
+            String line = bufferedReader.readLine();
+
+            while (line != null){
+                String[] arrayProd = line.split(",");
+
+                Produto produto = new Produto(Integer.parseInt(arrayProd[0]), arrayProd[1], Double.parseDouble(arrayProd[2].substring(2)), Integer.parseInt(arrayProd[4]));
+                janelaCadastroProdutos.getListaProdutos().add(produto);
+
+                line = bufferedReader.readLine();
+
+            }
+
 
             if (idP <= 0){
                 JOptionPane.showMessageDialog(null, "ID inválido!");
@@ -55,6 +75,9 @@ public class JanelaRemoverProdutos extends JanelaAtualizarProduto {
                 JOptionPane.showMessageDialog(null, "Produto não encontrado!");
                 return;
             }
+
+
+
 
 
             Produto produto = janelaCadastroProdutos.getListaProdutos().get(idP-1);
@@ -188,6 +211,10 @@ public class JanelaRemoverProdutos extends JanelaAtualizarProduto {
         }catch (NumberFormatException numb){
             JOptionPane.showMessageDialog(null, "ID invalido!");
 
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
     }
