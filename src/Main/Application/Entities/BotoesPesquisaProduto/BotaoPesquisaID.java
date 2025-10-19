@@ -87,7 +87,7 @@ public class BotaoPesquisaID implements ServiceActionListeners{
 
 
                     String[] produtoFinal = produto.abaProdutos().split("-");
-                    String nameP = produtoFinal[0];
+                    String nameP = produtoFinal[0].toLowerCase();
                     String precoP = produtoFinal[1].substring(3);
                     String quantP = produtoFinal[2].substring(4);
                     String simbP = produtoFinal[3];
@@ -155,7 +155,7 @@ public class BotaoPesquisaID implements ServiceActionListeners{
                             textQuantProd.setVisible(false);
 
 
-                            JTextField nameProd = new JTextField(nameP);
+                            JTextField nameProd = new JTextField(nameP.toLowerCase());
                             nameProd.setBounds(150, 80, 290, 35);
                             nameProd.setFont(new Font("arial", Font.PLAIN, 25));
 

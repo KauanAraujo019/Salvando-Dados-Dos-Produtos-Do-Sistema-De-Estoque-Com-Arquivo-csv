@@ -183,8 +183,10 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
 
 
                     String[] produtoFinal = prodAba.split("-");
-                    String nameP = produtoFinal[0];
+                    String nameP = produtoFinal[0].toLowerCase();
                     String precoP = produtoFinal[1].substring(3);
+                    double precoP2 = Double.parseDouble(precoP);
+                    precoP = String.format("%.2f", precoP2);
                     String quantP = produtoFinal[2].substring(4);
                     String simbP = produtoFinal[3];
 
@@ -239,6 +241,7 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
 
 
                     Produto finalProduto = produto;
+                    String finalPrecoP = precoP;
                     botaoAtualizar.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -249,12 +252,12 @@ public class BotaoPesquisaNome implements ServiceActionListeners{
                             textQuantProd.setVisible(false);
 
 
-                            JTextField nameProd = new JTextField(nameP);
+                            JTextField nameProd = new JTextField(nameP.toLowerCase());
                             nameProd.setBounds(150, 80, 290, 35);
                             nameProd.setFont(new Font("arial", Font.PLAIN, 25));
 
 
-                            JTextField priceProd = new JTextField(precoP);
+                            JTextField priceProd = new JTextField(finalPrecoP);
                             priceProd.setBounds(150, 120, 150, 35);
                             priceProd.setFont(new Font("arial", Font.PLAIN, 25));
 

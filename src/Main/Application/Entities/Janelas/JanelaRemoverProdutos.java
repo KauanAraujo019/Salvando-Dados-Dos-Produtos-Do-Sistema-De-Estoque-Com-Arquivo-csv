@@ -60,6 +60,7 @@ public class JanelaRemoverProdutos extends JanelaAtualizarProduto {
                 String[] arrayProd = line.split(",");
 
                 Produto produto = new Produto(Integer.parseInt(arrayProd[0]), arrayProd[1], Double.parseDouble(arrayProd[2].substring(2)), Integer.parseInt(arrayProd[4]));
+                produto.setSimbolPreco(arrayProd[3]);
                 janelaCadastroProdutos.getListaProdutos().add(produto);
 
                 line = bufferedReader.readLine();
@@ -87,8 +88,11 @@ public class JanelaRemoverProdutos extends JanelaAtualizarProduto {
             try {
 
                 String[] produtoFinal = produto.abaProdutos().split("-");
-                String nameP = produtoFinal[0];
+                String nameP = produtoFinal[0].toLowerCase();
                 String precoP = produtoFinal[1].substring(3);
+                double precoP2 = Double.parseDouble(precoP);
+                precoP = String.format("%.2f", precoP2);
+
                 String quantP = produtoFinal[2].substring(4);
                 String simbP = produtoFinal[3];
 
